@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+# Фотографии проектов (загружаются на Beget напрямую)
+/public/images/projects/*/before/
+/public/images/projects/*/during/
+/public/images/projects/*/after/

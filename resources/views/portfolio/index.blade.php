@@ -30,6 +30,7 @@
             gap: 10px;
             margin-bottom: 20px;
             border-bottom: 2px solid #ecf0f1;
+            flex-wrap: wrap;
         }
         .stage-tab {
             padding: 12px 24px;
@@ -74,7 +75,6 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
         }
         .gallery-item img {
             width: 100%;
@@ -84,17 +84,6 @@
             transition: transform 0.3s;
         }
         .gallery-item:hover img { transform: scale(1.05); }
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 8px;
-            font-size: 0.9em;
-            text-align: center;
-        }
         
         .empty-state { text-align: center; padding: 50px; color: #7f8c8d; font-size: 1.2em; }
     </style>
@@ -106,98 +95,80 @@
     <div class="container">
         <h1>Выполненные объекты</h1>
 
-        @if(isset($projects) && $projects->count() > 0)
-            @foreach($projects as $project)
-                <div class="project-card">
-                    <div class="project-header">
-                        <h2>{{ $project->title }}</h2>
-                        <div class="project-meta">
-                            <span>📍 {{ $project->address }}</span>
-                            <span>📅 {{ $project->year_completed }} г.</span>
-                            <span>🏷️ {{ $project->category }}</span>
-                        </div>
-                    </div>
-                    <p style="color: #555; line-height: 1.6; margin-bottom: 20px;">{{ $project->description }}</p>
+        <div class="project-card">
+            <div class="project-header">
+                <h2>Кровельные работы в Североморске</h2>
+                <div class="project-meta">
+                    <span>📍 г. Североморск, ул. Саши Ковалева, 4</span>
+                    <span>📅 2024 г.</span>
+                    <span>🏷️ Кровельные работы</span>
+                </div>
+            </div>
 
-                    @php
-                        $beforePhotos = $project->photos->where('stage', 'before')->sortBy('sort_order');
-                        $duringPhotos = $project->photos->where('stage', 'during')->sortBy('sort_order');
-                        $afterPhotos = $project->photos->where('stage', 'after')->sortBy('sort_order');
-                    @endphp
-
-                    @if($beforePhotos->count() > 0 || $duringPhotos->count() > 0 || $afterPhotos->count() > 0)
-                        <div class="stage-tabs">
-                            @if($beforePhotos->count() > 0)
-                                <button class="stage-tab active" onclick="showStage('before-{{ $project->id }}')">
-                                    📋 ДО начала работ <span class="count">{{ $beforePhotos->count() }}</span>
-                                </button>
-                            @endif
-                            @if($duringPhotos->count() > 0)
-                                <button class="stage-tab" onclick="showStage('during-{{ $project->id }}')">
-                                    🔨 В процессе <span class="count">{{ $duringPhotos->count() }}</span>
-                                </button>
-                            @endif
-                            @if($afterPhotos->count() > 0)
-                                <button class="stage-tab" onclick="showStage('after-{{ $project->id }}')">
-                                    ✅ После работ <span class="count">{{ $afterPhotos->count() }}</span>
-                                </button>
-                            @endif
-                        </div>
-
-                        @if($beforePhotos->count() > 0)
-                            <div id="before-{{ $project->id }}" class="gallery active">
-                                @foreach($beforePhotos as $photo)
-                                    <div class="gallery-item">
-                                        <img src="{{ asset($photo->image_path) }}" alt="{{ $photo->caption }}">
-                                        
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        @if($duringPhotos->count() > 0)
-                            <div id="during-{{ $project->id }}" class="gallery">
-                                @foreach($duringPhotos as $photo)
-                                    <div class="gallery-item">
-                                        <img src="{{ asset($photo->image_path) }}" alt="{{ $photo->caption }}">
-                                
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        @if($afterPhotos->count() > 0)
-                            <div id="after-{{ $project->id }}" class="gallery">
-                                @foreach($afterPhotos as $photo)
-                                    <div class="gallery-item">
-                                        <img src="{{ asset($photo->image_path) }}" alt="{{ $photo->caption }}">
-                                       
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    @else
-                        <p style="color: #95a5a6; font-style: italic;">Фотографии объекта пока не добавлены.</p>
+            @if(count($beforePhotos) > 0 || count($duringPhotos) > 0 || count($afterPhotos) > 0)
+                <div class="stage-tabs">
+                    @if(count($beforePhotos) > 0)
+                        <button class="stage-tab active" onclick="showStage('before', this)">
+                            📋 ДО начала работ <span class="count">{{ count($beforePhotos) }}</span>
+                        </button>
+                    @endif
+                    @if(count($duringPhotos) > 0)
+                        <button class="stage-tab" onclick="showStage('during', this)">
+                            🔨 В процессе <span class="count">{{ count($duringPhotos) }}</span>
+                        </button>
+                    @endif
+                    @if(count($afterPhotos) > 0)
+                        <button class="stage-tab" onclick="showStage('after', this)">
+                            ✅ После работ <span class="count">{{ count($afterPhotos) }}</span>
+                        </button>
                     @endif
                 </div>
-            @endforeach
-        @else
-            <div class="empty-state">
-                <p>🚧 Раздел находится в наполнении. Скоро здесь появятся фото наших лучших объектов!</p>
-            </div>
-        @endif
+
+                @if(count($beforePhotos) > 0)
+                    <div id="before" class="gallery active">
+                        @foreach($beforePhotos as $photo)
+                            <div class="gallery-item">
+                                <img src="{{ $photo }}" alt="Фото ДО">
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if(count($duringPhotos) > 0)
+                    <div id="during" class="gallery">
+                        @foreach($duringPhotos as $photo)
+                            <div class="gallery-item">
+                                <img src="{{ $photo }}" alt="Фото в процессе">
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if(count($afterPhotos) > 0)
+                    <div id="after" class="gallery">
+                        @foreach($afterPhotos as $photo)
+                            <div class="gallery-item">
+                                <img src="{{ $photo }}" alt="Фото после">
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            @else
+                <div class="empty-state">
+                    <p>🚧 Фотографии объекта скоро появятся!</p>
+                </div>
+            @endif
+        </div>
     </div>
 
     <script>
-        function showStage(stageId) {
-            // Скрываем все галереи в этом проекте
-            const card = document.getElementById(stageId).closest('.project-card');
+        function showStage(stageId, clickedTab) {
+            const card = document.querySelector('.project-card');
             card.querySelectorAll('.gallery').forEach(gallery => gallery.classList.remove('active'));
             card.querySelectorAll('.stage-tab').forEach(tab => tab.classList.remove('active'));
             
-            // Показываем нужную галерею
             document.getElementById(stageId).classList.add('active');
-            event.target.classList.add('active');
+            clickedTab.classList.add('active');
         }
     </script>
 

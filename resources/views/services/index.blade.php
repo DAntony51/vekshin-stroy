@@ -16,7 +16,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .birthday-banner .big-number {
-            font-size: 6em; /* Огромная цифра */
+            font-size: 6em;
             font-weight: 900;
             line-height: 1;
             margin: 0;
@@ -132,8 +132,14 @@
 
         /* Анимация появления */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Остальные стили */
@@ -155,42 +161,110 @@
             .hero-subtitle { font-size: 1.2em; }
             .birthday-banner .big-number { font-size: 4em; }
             .birthday-banner h2 { font-size: 1.8em; }
+            .birthday-banner p { font-size: 1.05em; }
         }
 
+        /* Карточка категории с постоянным фоновым изображением */
         .category-card {
-            background: white;
+            position: relative;
             border-radius: 12px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
             text-decoration: none;
-            color: inherit;
-            border-top: 5px solid #3498db;
+            color: white;
+            overflow: hidden;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: none;
         }
+        
+        /* Фоновое изображение (постоянное) */
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease;
+            z-index: 0;
+        }
+        
+        /* Затемнение поверх изображения (постоянное) */
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(44, 62, 80, 0.95) 0%, rgba(44, 62, 80, 0.7) 50%, rgba(44, 62, 80, 0.5) 100%);
+            z-index: 1;
+        }
+        
         .category-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-top-color: #2ecc71;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
         }
+        
+        .category-card:hover::before {
+            transform: scale(1.1);
+        }
+        
+        .category-card h3,
+        .category-card p,
+        .category-card .btn-text {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .category-card:hover h3 {
+            color: #2ecc71;
+        }
+        
+        /* Фоновые изображения для каждой категории */
+        .category-card[data-category="1"]::before {
+            background-image: url('{{ asset('images/services/roof.avif') }}');
+        }
+        .category-card[data-category="2"]::before {
+            background-image: url('{{ asset('images/services/facade.avif') }}');
+        }
+        .category-card[data-category="3"]::before {
+            background-image: url('{{ asset('images/services/mounting.avif') }}');
+        }
+     .category-card[data-category="4"]::before {
+    background-image: url('{{ asset('images/services/cleaning.jpg') }}');
+    background-position: right center;
+}
+        
         .category-card h3 {
-            color: #2c3e50;
-            font-size: 1.3em;
+            color: white;
+            font-size: 1.4em;
             margin: 0 0 15px 0;
             text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            transition: color 0.3s ease;
         }
         .category-card p {
-            color: #7f8c8d;
+            color: rgba(255, 255, 255, 0.95);
             font-size: 0.95em;
-            line-height: 1.5;
+            line-height: 1.6;
             margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         .category-card .btn-text {
-            color: #3498db;
+            color: #2ecc71;
             font-weight: bold;
             font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
-        .category-card:hover .btn-text { color: #2ecc71; }
     </style>
 </head>
 <body>
@@ -207,10 +281,10 @@
         <p>
             Пусть здоровье будет крепким, как фундамент надежного дома, а дела процветают и приносят только радость!<br>
             Смотри в будущее с неизменным оптимизмом, верой в лучшие перемены и уверенностью в себе.<br>
-            Ты — наша главная опора и вдохновение!
+            Ты — наша опора и наша надежда!
         </p>
         <div class="gift-badge">
-            🎁 Этот сайт — мой искренний подарок тебе. Только вперёд! 🚀
+            🎁 Этот сайт — мой искренний подарок тебе! Так что только вперёд! Победа за нами! 🚀
         </div>
     </div>
     <!-- 🎉 КОНЕЦ ПОЗДРАВИТЕЛЬНОГО БЛОКА 🎉 -->
@@ -233,7 +307,7 @@
 
         <div class="categories-grid">
             @foreach($categories as $category)
-                <a href="{{ route('services.show', $category->id) }}" class="category-card">
+                <a href="{{ route('services.show', $category->id) }}" class="category-card" data-category="{{ $category->id }}">
                     <h3>{{ $category->name }}</h3>
                     <p>{{ $category->description }}</p>
                     <span class="btn-text">Подробнее →</span>
