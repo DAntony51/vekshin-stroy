@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кровельные и фасадные работы в Мурманске | ВЕКШИН</title>
     <style>
-        /* 🎉 Стили для поздравительного блока 🎉 */
+        /* 🎉 Стили для поздравительного блока (ЗАКОММЕНТИРОВАНО 25.06.2026) 🎉
         .birthday-banner {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #d4af37 100%);
             color: #ffffff;
@@ -55,6 +55,7 @@
         }
         .birthday-banner .deco-1 { top: 10px; left: 5%; transform: rotate(-15deg); }
         .birthday-banner .deco-2 { bottom: 10px; right: 5%; transform: rotate(15deg); }
+        КОНЕЦ СТИЛЕЙ ПОЗДРАВИТЕЛЬНОГО БЛОКА 🎉 */
 
         /* Hero Section (Большой баннер) */
         .hero {
@@ -159,9 +160,9 @@
             .hero { height: 500px; }
             .hero h1 { font-size: 2em; }
             .hero-subtitle { font-size: 1.2em; }
-            .birthday-banner .big-number { font-size: 4em; }
+            /* .birthday-banner .big-number { font-size: 4em; }
             .birthday-banner h2 { font-size: 1.8em; }
-            .birthday-banner p { font-size: 1.05em; }
+            .birthday-banner p { font-size: 1.05em; } */
         }
 
         /* Карточка категории с постоянным фоновым изображением */
@@ -238,10 +239,10 @@
         .category-card[data-category="3"]::before {
             background-image: url('{{ asset('images/services/mounting.avif') }}');
         }
-     .category-card[data-category="4"]::before {
-    background-image: url('{{ asset('images/services/cleaning.jpg') }}');
-    background-position: right center;
-}
+        .category-card[data-category="4"]::before {
+            background-image: url('{{ asset('images/services/cleaning.jpg') }}');
+            background-position: right center;
+        }
         
         .category-card h3 {
             color: white;
@@ -271,7 +272,7 @@
 
     @include('partials.header')
 
-    <!-- 🎉 ПОЗДРАВИТЕЛЬНЫЙ БЛОК (УДАЛИТЬ ПОЗЖЕ) 🎉 -->
+    {{-- 🎉 ПОЗДРАВИТЕЛЬНЫЙ БЛОК (ЗАКОММЕНТИРОВАН 25.06.2026) 🎉
     <div class="birthday-banner">
         <div class="deco deco-1">🎉</div>
         <div class="deco deco-2">🎂</div>
@@ -281,13 +282,13 @@
         <p>
             Пусть здоровье будет крепким, как фундамент надежного дома, а дела процветают и приносят только радость!<br>
             Смотри в будущее с неизменным оптимизмом, верой в лучшие перемены и уверенностью в себе.<br>
-            Ты — наша опора и наша надежда!
+            Ты — наша главная опора и вдохновение!
         </p>
         <div class="gift-badge">
-            🎁 Этот сайт — мой искренний подарок тебе! Так что только вперёд! Победа за нами! 🚀
+            🎁 Этот сайт — мой искренний подарок тебе. Только вперёд! 🚀
         </div>
     </div>
-    <!-- 🎉 КОНЕЦ ПОЗДРАВИТЕЛЬНОГО БЛОКА 🎉 -->
+    🎉 КОНЕЦ ПОЗДРАВИТЕЛЬНОГО БЛОКА 🎉 --}}
 
     {{-- Hero Section (Большой баннер с панорамой) --}}
     <section class="hero">
